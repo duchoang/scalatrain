@@ -27,3 +27,9 @@ out/
 
 # Mac
 .DS_Store
+
+# sbt-koan
+.koan*
+
+# CourseGen
+.tag
