@@ -51,5 +51,5 @@ class TrainSpec extends WordSpec with Matchers {
       ice724.departureTimes shouldEqual(Vector(("08:50", munich)), ("10:00",nuremberg), ("12:10", frankfurt), ("13:39",cologne))
     }
   }
-  
+
 }

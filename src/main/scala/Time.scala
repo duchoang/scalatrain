@@ -1,6 +1,0 @@
-/**
- * @author pallay
- */
-class Time {
-
-}
