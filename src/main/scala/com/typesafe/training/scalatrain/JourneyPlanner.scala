@@ -26,20 +26,31 @@ case class JourneyPlanner(trains: Set[Train]) {
       }
     )
 
-  //all hops of all trains, grouped by the departing station
+  // All hops of all trains, grouped by the departing station
   def allMappingHops: Map[Station, Set[Hop]] = trains.flatMap(_.allHops).groupBy(hop => hop.from)
 
-  //connections between two stations given a departure time.
+  // Connections between two stations given a departure time.
   def allConnections(start: Station, end: Station, departureTime: Time): Set[Seq[Hop]] = {
 
     val allHops = this.allMappingHops
 
+//    def findPath(from: Station, end: Station, visitedPath: Seq[Hop]): Set[Seq[Hop]] = {
+//      if (from == end) Set(visitedPath)
+//      else {
+//        val allPaths: Set[Seq[Hop]] =
+//          (for (hop <- allHops.getOrElse(from, Set()) if hasRepeatedHop(visitedPath, hop)) yield {
+//          findPath(hop.to, end, visitedPath :+ hop)
+//        }).flatten
+//        allPaths
+//      }
+//    }
+
+    // TODO <<:
     def findPath(from: Station, end: Station, visitedPath: Seq[Hop]): Set[Seq[Hop]] = {
-//      println(s"find path $from -> $end, visited path:\n\t${visitedPath.map(hop => s"${hop.from} -> ${hop.to}, train ${hop.train.info}").mkString("\n\t")}")
       if (from == end) Set(visitedPath)
       else {
         val allPaths: Set[Seq[Hop]] =
-          (for (hop <- allHops.getOrElse(from, Set()) if !visitedPath.exists(visitedHop => visitedHop.from == hop.to)) yield {
+          (for (hop <- allHops.getOrElse(from, Set()) if hasRepeatedHop(visitedPath, hop)) yield {
           findPath(hop.to, end, visitedPath :+ hop)
         }).flatten
         allPaths
@@ -55,4 +66,7 @@ case class JourneyPlanner(trains: Set[Train]) {
     }
   }
 
+  private def hasRepeatedHop(visitedPath: Seq[Hop], hop: Hop): Boolean = {
+    !visitedPath.exists(visitedHop => visitedHop.from == hop.to)
+  }
 }

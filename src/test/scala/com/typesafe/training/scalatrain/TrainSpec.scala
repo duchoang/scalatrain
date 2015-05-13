@@ -63,5 +63,10 @@ class TrainSpec extends WordSpec with Matchers {
     }
   }
 
+  "toString" should {
+    "have the correct format" in {
+      ice724.toString shouldEqual "ice_724"
+    }
+  }
 
 }

@@ -37,14 +37,6 @@ object TestData {
     )
   )
 
-  val ice728 = Train(
-    InterCityExpress(728),
-    Vector(
-      ice728EssenTime     -> essen,
-      ice728NurembergTime -> nuremberg
-    )
-  )
-
   val ice726 = Train(
     InterCityExpress(726),
     Vector(
@@ -55,6 +47,14 @@ object TestData {
     )
   )
 
+  val ice728 = Train(
+    InterCityExpress(728),
+    Vector(
+      ice728EssenTime     -> essen,
+      ice728NurembergTime -> nuremberg
+    )
+  )
+
   val planner = new JourneyPlanner(Set(ice724, ice726, ice728))
 
   val hopMunich2NurembergIce726    = Hop(munich, nuremberg, ice726)
@@ -62,17 +62,14 @@ object TestData {
 
   val hopMunich2NurembergIce724    = Hop(munich, nuremberg, ice724)
   val hopNuremberg2FrankfurtIce724 = Hop(nuremberg, frankfurt, ice724)
-  val hopFrank2ColoIce724          = Hop(frankfurt, cologne, ice724)
-  val hopColo2EssenIce724          = Hop(cologne, essen, ice724)
+  val hopFrank2CologneIce724       = Hop(frankfurt, cologne, ice724)
+  val hopCologne2EssenIce724       = Hop(cologne, essen, ice724)
   val hopEssen2NuremIce728         = Hop(essen, nuremberg, ice728)
 
-  val invalidPath = Seq(hopMunich2NurembergIce724, hopNuremberg2FrankfurtIce726)
+  val invalidPath = Seq(hopMunich2NurembergIce724, hopNuremberg2FrankfurtIce726) // due to departure time of 726
   val validPath   = Seq(hopMunich2NurembergIce726, hopNuremberg2FrankfurtIce724)
 
   val nonCyclePath = Seq(hopMunich2NurembergIce726, hopNuremberg2FrankfurtIce724)
-
-  val cyclePath = Seq(hopMunich2NurembergIce724, hopNuremberg2FrankfurtIce724, hopFrank2ColoIce724, hopColo2EssenIce724, hopEssen2NuremIce728)
-
-  val cyclePath2 = Seq(hopMunich2NurembergIce724, hopNuremberg2FrankfurtIce724, hopFrank2ColoIce724, hopColo2EssenIce724, hopEssen2NuremIce728, hopNuremberg2FrankfurtIce724, hopFrank2ColoIce724)
-
+  val cyclePath = Seq(hopMunich2NurembergIce724, hopNuremberg2FrankfurtIce724, hopFrank2CologneIce724, hopCologne2EssenIce724, hopEssen2NuremIce728)
+  val cyclePath2 = Seq(hopMunich2NurembergIce724, hopNuremberg2FrankfurtIce724, hopFrank2CologneIce724, hopCologne2EssenIce724, hopEssen2NuremIce728, hopNuremberg2FrankfurtIce724, hopFrank2CologneIce724)
 }

@@ -26,24 +26,21 @@ case class Hop(from: Station, to: Station, train: Train) {
 
 object Hop {
   def checkPathValid(path: Seq[Hop]): Boolean = path match {
+    case hop1 +: Nil => true
     case hop1 +: hop2 +: rest =>
       val (_, arr1) = hop1.departureAndArrivalTime
       val (dep2, _) = hop2.departureAndArrivalTime
       arr1 <= dep2 && checkPathValid(hop2 +: rest)
-    case _ => true
+    case Nil => false // should be exhaustive
+    case _ => false   // shouldn't get here
   }
 
-  def containCycle(path: Seq[Hop], visitedStation: Seq[Station] = Seq()): Boolean = {
-    path match {
-      case hop +: Nil =>
-        visitedStation.contains(hop.to)
-      case hop +: rest =>
-        if (visitedStation.contains(hop.from))
-          true
-        else
-          containCycle(rest, hop.from +: visitedStation)
-      case Nil => false
-    }
+  def containCycle(path: Seq[Hop], visitedStation: Set[Station] = Set()): Boolean = path match {
+    case hop +: Nil =>
+      visitedStation.contains(hop.to)
+    case hop +: rest =>
+      visitedStation.contains(hop.from) || containCycle(rest, visitedStation + hop.from)
+    case Nil => false
   }
 
 }
