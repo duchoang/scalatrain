@@ -83,4 +83,5 @@ object TestData {
 
   val nonCyclePath = Seq(hopMunich2NurembergIce726, hopNuremberg2FrankfurtIce724)
   val cyclePath = Seq(hopMunich2NurembergIce724, hopNuremberg2FrankfurtIce724, hopFrank2ColoIce724, hopColo2EssenIce724, hopEssen2NuremIce728)
+  val cyclePath2 = Seq(hopMunich2NurembergIce724, hopNuremberg2FrankfurtIce724, hopFrank2ColoIce724, hopColo2EssenIce724, hopEssen2NuremIce728, hopNuremberg2FrankfurtIce724, hopFrank2ColoIce724)
 }
