@@ -14,8 +14,8 @@ class TrainSpec extends WordSpec with Matchers {
     "stop in Nurember" in {
       ice724.timeAt(nuremberg) shouldEqual Some(ice724NurembergTime)
     }
-    "not stop in Essen" in {
-      ice724.timeAt(essen) shouldEqual None
+    "stop in Essen" in {
+      ice724.timeAt(essen) shouldEqual Some(ice724EssenTime)
     }
   }
 
@@ -37,18 +37,18 @@ class TrainSpec extends WordSpec with Matchers {
 
   "stations" should {
     "be initialized correctly" in {
-      ice724.stations shouldEqual Vector(munich, nuremberg, frankfurt, cologne)
+      ice724.stations shouldEqual Vector(munich, nuremberg, frankfurt, cologne, essen)
     }
   }
   "backToBack" should {
     "the correct pair of stations" in {
-      ice724.backToBackStations shouldEqual Seq((munich, nuremberg),(nuremberg, frankfurt),(frankfurt, cologne))
+      ice724.backToBackStations shouldEqual Seq((munich, nuremberg),(nuremberg, frankfurt),(frankfurt, cologne),(cologne, essen))
     }
   }
 
   "departureTimes" should {
     "the correct pair of departure time and station" in {
-      ice724.departureTimes shouldEqual Vector((ice724MunichTime, munich), (ice724NurembergTime,nuremberg), (ice724FrankfurtTime, frankfurt))
+      ice724.departureTimes shouldEqual Vector((ice724MunichTime, munich), (ice724NurembergTime,nuremberg), (ice724FrankfurtTime, frankfurt), (ice724CologneTime, cologne))
     }
   }
 

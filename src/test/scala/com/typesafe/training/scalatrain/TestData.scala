@@ -24,6 +24,12 @@ object TestData {
 
   val ice724CologneTime = Time(13, 39)
 
+  val ice724EssenTime = Time(15)
+
+  val ice728EssenTime = Time(15, 30)
+
+  val ice728NurembergTime = Time(16)
+
   val ice726MunichTime = Time(7, 50)
 
   val ice726NurembergTime = Time(9)
@@ -38,7 +44,16 @@ object TestData {
       ice724MunichTime -> munich,
       ice724NurembergTime -> nuremberg,
       ice724FrankfurtTime -> frankfurt,
-      ice724CologneTime -> cologne
+      ice724CologneTime -> cologne,
+      ice724EssenTime -> essen
+    )
+  )
+
+  val ice728 = Train(
+    InterCityExpress(728),
+    Vector(
+      ice728EssenTime -> essen,
+      ice728NurembergTime -> nuremberg
     )
   )
 
@@ -52,5 +67,20 @@ object TestData {
     )
   )
 
-  val planner = new JourneyPlanner(Set(ice724, ice726))
+  val planner = new JourneyPlanner(Set(ice724, ice726, ice728))
+
+  val hopMunich2NurembergIce726 = Hop(munich, nuremberg, ice726)
+  val hopNuremberg2FrankfurtIce726 = Hop(nuremberg, frankfurt, ice726)
+
+  val hopMunich2NurembergIce724 = Hop(munich, nuremberg, ice724)
+  val hopNuremberg2FrankfurtIce724 = Hop(nuremberg, frankfurt, ice724)
+  val hopFrank2ColoIce724 = Hop(frankfurt, cologne, ice724)
+  val hopColo2EssenIce724 = Hop(cologne, essen, ice724)
+  val hopEssen2NuremIce728 = Hop(essen, nuremberg, ice728)
+
+  val invalidPath = Seq(hopMunich2NurembergIce724, hopNuremberg2FrankfurtIce726)
+  val validPath = Seq(hopMunich2NurembergIce726, hopNuremberg2FrankfurtIce724)
+
+  val nonCyclePath = Seq(hopMunich2NurembergIce726, hopNuremberg2FrankfurtIce724)
+  val cyclePath = Seq(hopMunich2NurembergIce724, hopNuremberg2FrankfurtIce724, hopFrank2ColoIce724, hopColo2EssenIce724, hopEssen2NuremIce728)
 }

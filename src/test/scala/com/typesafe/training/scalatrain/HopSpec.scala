@@ -21,6 +21,25 @@ class HopSpec extends WordSpec with Matchers {
       val hop = Hop(fromStation._2, toStation._2, ice724)
       hop.departureAndArrivalTime2.shouldEqual (fromStation._1, toStation._1)
     }
+  }
 
+  "checkPathValid" should {
+    "return true if the valid path" in {
+      Hop.checkPathValid(validPath) shouldBe true
+    }
+
+    "return false if the invalid path" in {
+      Hop.checkPathValid(invalidPath) shouldBe false
+    }
+  }
+
+  "containCycle" should {
+    "return true if contain cycle" in {
+      Hop.containCycle(cyclePath) shouldBe true
+    }
+
+//    "return false if contain no cycle" in {
+//      Hop.containCycle(nonCyclePath) shouldBe false
+//    }
   }
 }
