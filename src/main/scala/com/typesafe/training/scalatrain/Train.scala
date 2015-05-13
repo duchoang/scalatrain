@@ -14,8 +14,8 @@ case class Train(info: TrainInfo, schedule: Seq[(Time, Station)]) {
   def backToBackStations: Seq[(Station, Station)] =
     stations zip stations.tail
 
-  def departureTimes = for {
-    timeAndStation <- schedule
+  def departureTimes: Seq[(Time, Station)] = for {
+    timeAndStation <- schedule.init
   } yield timeAndStation._1 -> timeAndStation._2
-
+  
 }
