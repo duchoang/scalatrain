@@ -1,6 +1,6 @@
 package com.typesafe.training.scalatrain
 
-import scala.collection.+:
+import scala.collection.immutable.Set
 
 case class JourneyPlanner(trains: Set[Train]) {
 
@@ -25,4 +25,5 @@ case class JourneyPlanner(trains: Set[Train]) {
         case _                        => false
       }
     )
+
 }
