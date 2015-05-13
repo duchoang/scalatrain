@@ -21,4 +21,5 @@ case class Train(info: TrainInfo, schedule: Seq[(Time, Station)]) {
   def allHops: Seq[Hop] = this.backToBackStations map {
     case (from, to) => Hop(from, to, this)
   }
+
 }
