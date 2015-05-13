@@ -4,10 +4,10 @@
 
 package com.typesafe.training.scalatrain
 
-import java.lang.{ IllegalArgumentException => IAE }
-import org.scalatest.{ Matchers, WordSpec }
+import java.lang.{IllegalArgumentException => IAE}
+
+import org.scalatest.{Matchers, WordSpec}
 import play.api.libs.json.Json
-import scala.util.parsing.json.{ JSONObject => JsonObject }
 
 class TimeSpec extends WordSpec with Matchers {
 
@@ -18,18 +18,21 @@ class TimeSpec extends WordSpec with Matchers {
     "return Some wrapping a properly initialized Time for a valid JsonOject" in {
       (Time fromJson Json.obj("hours" -> 9, "minutes" -> 30)) shouldEqual Some(Time(9, 30))
     }
+
     "return failure if cannot parse the hours" in {
       (Time fromJson Json.obj("hours" -> "9", "minutes" -> 30)) shouldEqual None
     }
     "not return failure if cannot parse minutes" in {
       (Time fromJson Json.obj("hours" -> 9, "minutes" -> "30")) shouldEqual Some(Time(9, 0))
     }
+
   }
 
   "Calling fromJson after toJson" should {
     "return Some wrapping the original Time" in {
       val time = Time(9, 30)
-      (Time fromJson (time.toJson)) shouldEqual Some(time)
+      (Time fromJson time.toJson) shouldEqual Some(time)
+
     }
   }
 
