@@ -41,4 +41,14 @@ class JourneyPlannerSpec extends WordSpec with Matchers {
       planner.isShortTrip(nuremberg, essen) shouldBe true
     }
   }
+
+  "Calling allMappingHops" should {
+    "return all hops of all trains, grouped by the departing station" in {
+      planner.allMappingHops shouldEqual Map(
+        munich -> Set(Hop(munich, nuremberg, ice724), Hop(munich, nuremberg, ice726)),
+        nuremberg -> Set(Hop(nuremberg, frankfurt, ice724), Hop(nuremberg, frankfurt, ice726)),
+        frankfurt -> Set(Hop(frankfurt, cologne, ice724), Hop(frankfurt, essen, ice726))
+      )
+    }
+  }
 }
