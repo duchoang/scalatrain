@@ -26,4 +26,5 @@ case class JourneyPlanner(trains: Set[Train]) {
       }
     )
 
+  def allMappingHops: Map[Station, Set[Hop]] = trains.flatMap(_.allHops).groupBy(hop => hop.from)
 }
