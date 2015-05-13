@@ -17,5 +17,5 @@ case class Train(info: TrainInfo, schedule: Seq[(Time, Station)]) {
   def departureTimes: Seq[(Time, Station)] = for {
     timeAndStation <- schedule.init
   } yield timeAndStation._1 -> timeAndStation._2
-  
+
 }
