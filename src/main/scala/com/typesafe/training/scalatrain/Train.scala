@@ -11,16 +11,16 @@ case class Train(info: TrainInfo, schedule: Seq[(Time, Station)]) {
   def timeAt(station: Station): Option[Time] =
     schedule.find(s => s._2 == station).map(_._1)
 
-  def backToBackStations: Seq[(Station, Station)] =
+  val backToBackStations: Seq[(Station, Station)] =
     stations zip stations.tail
 
-  def departureTimes: Seq[(Time, Station)] = for {
+  val departureTimes: Seq[(Time, Station)] = for {
     timeAndStation <- schedule.init
   } yield timeAndStation._1 -> timeAndStation._2
 
-  def allHops: Seq[Hop] = this.backToBackStations map {
+  val allHops: Seq[Hop] = this.backToBackStations map {
     case (from, to) => Hop(from, to, this)
   }
 
-  override def toString = info.toString
+  override val toString = info.toString
 }

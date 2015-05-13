@@ -4,7 +4,7 @@ case class Hop(from: Station, to: Station, train: Train) {
   require(train.backToBackStations.nonEmpty)
   require(train.backToBackStations.contains((from, to)))
 
-  def departureAndArrivalTime: (Time, Time) = {
+  val departureAndArrivalTime: (Time, Time) = {
     val fromSchedule = train.schedule.find(timeStation => timeStation._2 == from)
     val toSchedule = train.schedule.find(timeStation => timeStation._2 == to)
     assert(fromSchedule.nonEmpty)
@@ -12,12 +12,12 @@ case class Hop(from: Station, to: Station, train: Train) {
     (fromSchedule.get._1, toSchedule.get._1)
   }
 
-  def departureAndArrivalTime2: (Time, Time) = (for {
+  val departureAndArrivalTime2: (Time, Time) = (for {
     (fromTime, fromStation) <- train.schedule if fromStation == from
     (toTime, toStation) <- train.schedule if toStation == to
   } yield (fromTime, toTime)).head
 
-  override def toString = {
+  override lazy val toString = {
     val (depart, arr) = this.departureAndArrivalTime
 //    s"Hop[$from to $to] with train $train from $depart->$arr"
     s"Hop[$from to $to]"
