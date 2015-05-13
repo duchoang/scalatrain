@@ -17,5 +17,4 @@ case class Hop(from: Station, to: Station, train: Train) {
     (toTime, toStation)     <- train.schedule if toStation == to
   } yield (fromTime, toTime)).head
 
-
 }
