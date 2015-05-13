@@ -14,5 +14,13 @@ class HopSpec extends WordSpec with Matchers {
     }
   }
 
+  "departureAndArrivalTime" should {
+    "return the correct arrival and departure times" in {
+      val fromStation = ice724.schedule.head
+      val toStation = ice724.schedule.tail.head
+      val hop = Hop(fromStation._2, toStation._2, ice724)
+      hop.departureAndArrivalTime2.shouldEqual (fromStation._1, toStation._1)
+    }
 
+  }
 }

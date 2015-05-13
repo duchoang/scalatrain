@@ -12,4 +12,9 @@ case class Hop(from: Station, to: Station, train: Train) {
     (fromSchedule.get._1, toSchedule.get._1)
   }
 
+  def departureAndArrivalTime2: (Time, Time) = (for {
+    (fromTime, fromStation) <- train.schedule if fromStation == from
+    (toTime, toStation)     <- train.schedule if toStation == to
+  } yield (fromTime, toTime)).head
+
 }
