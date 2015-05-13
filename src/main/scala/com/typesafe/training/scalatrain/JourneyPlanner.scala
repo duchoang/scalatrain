@@ -54,4 +54,5 @@ case class JourneyPlanner(trains: Set[Train]) {
       case Nil => false
     }
   }
+
 }
