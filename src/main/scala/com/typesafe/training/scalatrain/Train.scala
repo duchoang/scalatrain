@@ -11,7 +11,8 @@ case class Train(info: TrainInfo, schedule: Seq[(Time, Station)]) {
   def timeAt(station: Station): Option[Time] =
     schedule.find(s => s._2 == station).map(_._1)
 
-  def backToBackStations = stations.init zip stations.tail
+  def backToBackStations: Seq[(Station, Station)] =
+    stations zip stations.tail
 
   def departureTimes = for {
     timeAndStation <- schedule
