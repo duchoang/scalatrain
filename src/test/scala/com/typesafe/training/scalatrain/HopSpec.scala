@@ -36,10 +36,11 @@ class HopSpec extends WordSpec with Matchers {
   "containCycle" should {
     "return true if contain cycle" in {
       Hop.containCycle(cyclePath) shouldBe true
+      Hop.containCycle(cyclePath2) shouldBe true
     }
 
-//    "return false if contain no cycle" in {
-//      Hop.containCycle(nonCyclePath) shouldBe false
-//    }
+    "return false if contain no cycle" in {
+      Hop.containCycle(nonCyclePath) shouldBe false
+    }
   }
 }
