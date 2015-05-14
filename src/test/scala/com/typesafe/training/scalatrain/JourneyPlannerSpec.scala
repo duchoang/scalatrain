@@ -107,4 +107,16 @@ class JourneyPlannerSpec extends WordSpec with Matchers {
     }
   }
 
+  "Calling sortPathsByTotalTime" should {
+    "return the correct order of 2 paths" in {
+      Hop.checkPathValid(path1) shouldBe true
+      Hop.checkPathValid(path2) shouldBe true
+      val totalTimeOfPath1 = JourneyPlanner.calculateTotalTime(path1)
+      val totalTimeOfPath2 = JourneyPlanner.calculateTotalTime(path2)
+      val (paths, times) = JourneyPlanner.sortPathsByTotalTime(Set(path1, path2)).unzip
+      paths shouldEqual List(path2, path1)
+      times shouldEqual List(totalTimeOfPath2, totalTimeOfPath1)
+    }
+  }
+
 }

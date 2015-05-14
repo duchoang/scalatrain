@@ -58,3 +58,27 @@ case class JourneyPlanner(trains: Set[Train]) {
     !visitedPath.exists(_.from == hop.to)
   }
 }
+
+object JourneyPlanner {
+
+  def calculateTotalTime(path: Seq[Hop]): Int = {
+    val (_, lastArr) = path.last.departureAndArrivalTime
+    val (firstDepart, _) = path.head.departureAndArrivalTime
+    if (lastArr < firstDepart)
+      lastArr.asMinutes + 24*60 - firstDepart.asMinutes
+    else
+      lastArr - firstDepart
+  }
+
+  def sortPathsByTotalTime(paths: Set[Seq[Hop]]): List[(Seq[Hop], Int)] = {
+    val pathsWithTotalTime: List[(Seq[Hop], Int)] = paths.toList.map(path => {
+      assert(path.nonEmpty)
+      (path, calculateTotalTime(path))
+    })
+    pathsWithTotalTime.sortBy(tuple => tuple._2)
+  }
+
+  def sortPathsByTotalCost(paths: Set[Seq[Hop]]): List[Seq[Hop]] = {
+    List()
+  }
+}
