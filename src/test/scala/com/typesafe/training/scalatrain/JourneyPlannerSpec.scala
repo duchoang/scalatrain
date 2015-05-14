@@ -52,7 +52,6 @@ class JourneyPlannerSpec extends WordSpec with Matchers {
       planner.isShortTrip(munich, munich)       shouldBe false
       planner.isShortTrip(nuremberg, nuremberg) shouldBe false
     }
-
   }
 
   "Calling allMappingHops" should {
@@ -134,14 +133,14 @@ class JourneyPlannerSpec extends WordSpec with Matchers {
 
   "Calling trainsOn" should {
     "return the list of train working on given date" in {
-      planner.trainsOn(new DateTime(2015, 5, 13, 0, 0)) shouldEqual Set(ice724, ice726)
-      planner.trainsOn(new DateTime(2015, 5, 11, 0, 0)) shouldEqual Set(ice724)
-      planner.trainsOn(new DateTime(2015, 5, 16, 0, 0)) shouldEqual Set(ice726, ice728)
-      planner.trainsOn(new DateTime(2015, 5, 17, 0, 0)) shouldEqual Set(ice728)
+      planner.trainsOnDate(new DateTime(2015, 5, 13, 0, 0)) shouldEqual Set(ice724, ice726)
+      planner.trainsOnDate(new DateTime(2015, 5, 11, 0, 0)) shouldEqual Set(ice724)
+      planner.trainsOnDate(new DateTime(2015, 5, 16, 0, 0)) shouldEqual Set(ice726, ice728)
+      planner.trainsOnDate(new DateTime(2015, 5, 17, 0, 0)) shouldEqual Set(ice728)
     }
     "return the list of train working on holiday" in {
-      planner.trainsOn(christmasDate) shouldEqual Set(ice728)
-      planner.trainsOn(newyearDate) shouldEqual Set(ice726, ice728)
+      planner.trainsOnDate(christmasDate) shouldEqual Set(ice728)
+      planner.trainsOnDate(newyearDate) shouldEqual Set(ice726, ice728)
     }
   }
 

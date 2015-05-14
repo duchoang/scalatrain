@@ -8,7 +8,9 @@ case class JourneyPlanner(trains: Set[Train]) {
 
   val stations: Set[Station] = trains.flatMap(_.stations)
 
-  def trainsOn(givenDate: DateTime): Set[Train] = trains.filter(_.canRun(givenDate))
+  def trainsOnWeekday(dayOfWeek: DayOfWeek): Set[Train] = trains.filter(_.canRunOnWeekday(dayOfWeek))
+
+  def trainsOnDate(givenDate: DateTime): Set[Train] = trains.filter(_.canRunOnDate(givenDate))
 
   def trainsAt(station: Station): Set[Train] =
     trains.filter(_.stations.contains(station))
@@ -48,9 +50,7 @@ case class JourneyPlanner(trains: Set[Train]) {
         for {
           hop <- allHops.getOrElse(from, Set()) if hasRepeatedHop(visitedPath, hop)
           path <- findPath(hop.to, visitedPath :+ hop)
-        } yield {
-          path
-        }
+        } yield path
       }
     }
 
@@ -67,7 +67,7 @@ case class JourneyPlanner(trains: Set[Train]) {
     val departureTime: Time = Time(departureDateTime.getHourOfDay, departureDateTime.getMinuteOfHour)
     val allPaths: Set[Seq[Hop]] = allConnections(start, end, departureTime, allCost)
     allPaths.filter(path =>
-      path.nonEmpty && path.forall(hop => hop.train.canRun(departureDateTime)))
+      path.nonEmpty && path.forall(hop => hop.train.canRunOnDate(departureDateTime)))
   }
 
 }
