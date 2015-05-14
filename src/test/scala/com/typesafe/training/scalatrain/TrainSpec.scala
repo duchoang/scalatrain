@@ -54,11 +54,11 @@ class TrainSpec extends WordSpec with Matchers {
 
   "allHops" should {
     "the correct Hop" in {
-      ice724.allHops shouldEqual Vector(
-        Hop(munich, nuremberg, ice724),
-        Hop(nuremberg, frankfurt, ice724),
-        Hop(frankfurt, cologne, ice724),
-        Hop(cologne, essen, ice724)
+      ice724.allHops(allCostIce724) shouldEqual Vector(
+        Hop(munich, nuremberg, ice724, costIce724MunichNuremberg),
+        Hop(nuremberg, frankfurt, ice724, costIce724NurembergFrankfurt),
+        Hop(frankfurt, cologne, ice724, costIce724FrankfurtCologne),
+        Hop(cologne, essen, ice724, costIce724CologneEssen)
       )
     }
   }

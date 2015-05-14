@@ -26,12 +26,13 @@ case class JourneyPlanner(trains: Set[Train]) {
     )
 
   // All hops of all trains, grouped by the departing station
-  val allMappingHops: Map[Station, Set[Hop]] = trains.flatMap(_.allHops).groupBy(hop => hop.from)
+  def allMappingHops(allCost: Map[Train, Map[(Station, Station), Double]]): Map[Station, Set[Hop]] =
+    trains.flatMap(train => train.allHops(allCost(train))).groupBy(hop => hop.from)
 
   // Connections between two stations given a departure time.
-  def allConnections(start: Station, end: Station, departureTime: Time): Set[Seq[Hop]] = {
+  def allConnections(start: Station, end: Station, departureTime: Time, allCost: Map[Train, Map[(Station, Station), Double]]): Set[Seq[Hop]] = {
 
-    val allHops = this.allMappingHops
+    val allHops = this.allMappingHops(allCost)
 
     def findPath(from: Station, visitedPath: Seq[Hop]): Set[Seq[Hop]] = {
       if (from == end) Set(visitedPath)
@@ -54,5 +55,37 @@ case class JourneyPlanner(trains: Set[Train]) {
 
   private def hasRepeatedHop(visitedPath: Seq[Hop], hop: Hop): Boolean = {
     !visitedPath.exists(_.from == hop.to)
+  }
+}
+
+object JourneyPlanner {
+
+  def calculateTotalTime(path: Seq[Hop]): Int = {
+    val (_, lastArr) = path.last.departureAndArrivalTime
+    val (firstDepart, _) = path.head.departureAndArrivalTime
+    if (lastArr < firstDepart)
+      lastArr.asMinutes + 24*60 - firstDepart.asMinutes
+    else
+      lastArr - firstDepart
+  }
+
+  def calculateTotalCost(path: Seq[Hop]): Double = {
+    path.foldLeft(0.0)((costs, hop) => costs + hop.cost)
+  }
+
+  def sortPaths[A](paths: Set[Seq[Hop]], calculate: Seq[Hop] => A)(implicit ordering: Ordering[A]): List[(Seq[Hop], A)] = {
+    val pathsWithTotal: List[(Seq[Hop], A)] = paths.toList.map(path => {
+      assert(path.nonEmpty)
+      (path, calculate(path))
+    })
+    pathsWithTotal.sortBy(tuple => tuple._2)
+  }
+
+  def sortPathsByTotalTime(paths: Set[Seq[Hop]]): List[(Seq[Hop], Int)] = {
+    sortPaths[Int](paths, calculateTotalTime)
+  }
+
+  def sortPathsByTotalCost(paths: Set[Seq[Hop]]): List[(Seq[Hop], Double)] = {
+    sortPaths[Double](paths, calculateTotalCost)
   }
 }

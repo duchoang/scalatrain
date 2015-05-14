@@ -7,10 +7,10 @@ class HopSpec extends WordSpec with Matchers {
 
   "new Hope" should { // star wars
     "throw an exception for empty train schedule" in {
-      an[IllegalArgumentException] should be thrownBy Hop(ice724.stations.head, ice724.stations.head, new Train(InterCityExpress(724), Vector()))
+      an[IllegalArgumentException] should be thrownBy Hop(ice724.stations.head, ice724.stations.head, new Train(InterCityExpress(724), Vector()), 1)
     }
     "throw an exception for a train with stations that aren't backtoback" in {
-      an[IllegalArgumentException] should be thrownBy Hop(ice726.stations.head, ice726.stations.last, ice726)
+      an[IllegalArgumentException] should be thrownBy Hop(ice726.stations.head, ice726.stations.last, ice726, 1)
     }
   }
 
@@ -18,7 +18,7 @@ class HopSpec extends WordSpec with Matchers {
     "return the correct arrival and departure times" in {
       val fromStation = ice724.schedule.head
       val toStation = ice724.schedule.tail.head // get the second element
-      val hop = Hop(fromStation._2, toStation._2, ice724)
+      val hop = Hop(fromStation._2, toStation._2, ice724, costIce724MunichNuremberg)
 
       hop.departureAndArrivalTime2.shouldEqual (fromStation._1, toStation._1)
     }
@@ -27,7 +27,7 @@ class HopSpec extends WordSpec with Matchers {
   "toString" should {
     val fromStation = ice724.schedule.head
     val toStation = ice724.schedule.tail.head
-    val hop = Hop(fromStation._2, toStation._2, ice724)
+    val hop = Hop(fromStation._2, toStation._2, ice724, costIce724MunichNuremberg)
     "have the correct format" in {
       hop.toString shouldEqual "Hop[Munich to Nuremberg]"
     }

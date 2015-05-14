@@ -18,8 +18,9 @@ case class Train(info: TrainInfo, schedule: Seq[(Time, Station)]) {
     timeAndStation <- schedule.init
   } yield timeAndStation._1 -> timeAndStation._2
 
-  val allHops: Seq[Hop] = this.backToBackStations map {
-    case (from, to) => Hop(from, to, this)
+  def allHops(allCost: Map[(Station, Station), Double]): Seq[Hop] = this.backToBackStations map {
+    case (from, to) =>
+      Hop(from, to, this, allCost((from, to)))
   }
 
   override val toString = info.toString

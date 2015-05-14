@@ -24,7 +24,7 @@ object TestData {
   val ice726MunichTime    = Time(7, 50)
   val ice726NurembergTime = Time(9)
   val ice726FrankfurtTime = Time(11, 10)
-  val ice726CologneTime   = Time(13, 2)
+  val ice726EssenTime   = Time(13, 2)
 
   val ice724 = Train(
     InterCityExpress(724),
@@ -43,7 +43,7 @@ object TestData {
       ice726MunichTime    -> munich,
       ice726NurembergTime -> nuremberg,
       ice726FrankfurtTime -> frankfurt,
-      ice726CologneTime   -> essen
+      ice726EssenTime   -> essen
     )
   )
 
@@ -57,14 +57,14 @@ object TestData {
 
   val planner = new JourneyPlanner(Set(ice724, ice726, ice728))
 
-  val hopMunich2NurembergIce726    = Hop(munich, nuremberg, ice726)
-  val hopNuremberg2FrankfurtIce726 = Hop(nuremberg, frankfurt, ice726)
+  val hopMunich2NurembergIce726    = Hop(munich, nuremberg, ice726, 5)
+  val hopNuremberg2FrankfurtIce726 = Hop(nuremberg, frankfurt, ice726, 1)
 
-  val hopMunich2NurembergIce724    = Hop(munich, nuremberg, ice724)
-  val hopNuremberg2FrankfurtIce724 = Hop(nuremberg, frankfurt, ice724)
-  val hopFrank2CologneIce724       = Hop(frankfurt, cologne, ice724)
-  val hopCologne2EssenIce724       = Hop(cologne, essen, ice724)
-  val hopEssen2NuremIce728         = Hop(essen, nuremberg, ice728)
+  val hopMunich2NurembergIce724    = Hop(munich, nuremberg, ice724, 2)
+  val hopNuremberg2FrankfurtIce724 = Hop(nuremberg, frankfurt, ice724, 3)
+  val hopFrank2CologneIce724       = Hop(frankfurt, cologne, ice724, 4)
+  val hopCologne2EssenIce724       = Hop(cologne, essen, ice724, 7)
+  val hopEssen2NuremIce728         = Hop(essen, nuremberg, ice728, 8)
 
   val invalidPath = Seq(hopMunich2NurembergIce724, hopNuremberg2FrankfurtIce726) // due to departure time of 726
   val validPath   = Seq(hopMunich2NurembergIce726, hopNuremberg2FrankfurtIce724)
@@ -72,4 +72,43 @@ object TestData {
   val nonCyclePath = Seq(hopMunich2NurembergIce726, hopNuremberg2FrankfurtIce724)
   val cyclePath = Seq(hopMunich2NurembergIce724, hopNuremberg2FrankfurtIce724, hopFrank2CologneIce724, hopCologne2EssenIce724, hopEssen2NuremIce728)
   val cyclePath2 = Seq(hopMunich2NurembergIce724, hopNuremberg2FrankfurtIce724, hopFrank2CologneIce724, hopCologne2EssenIce724, hopEssen2NuremIce728, hopNuremberg2FrankfurtIce724, hopFrank2CologneIce724)
+
+  val path1 = Seq(hopMunich2NurembergIce726, hopNuremberg2FrankfurtIce726, hopFrank2CologneIce724)
+  val path2 = Seq(hopMunich2NurembergIce724, hopNuremberg2FrankfurtIce724, hopFrank2CologneIce724)
+
+  val costIce724MunichNuremberg = 1.0
+  val costIce724NurembergFrankfurt = 2.0
+  val costIce724FrankfurtCologne = 3.0
+  val costIce724CologneEssen = 4.0
+
+  val costIce726MunichNuremberg = 3.0
+  val costIce726NurembergFrankfurt = 2.0
+  val costIce726FrankfurtEssen = 1.0
+
+  val costIce728EssenNuremberg = 4.0
+
+
+  val allCostIce724 = Map(
+    (munich, nuremberg) -> costIce724MunichNuremberg,
+    (nuremberg, frankfurt) -> costIce724NurembergFrankfurt,
+    (frankfurt, cologne) -> costIce724FrankfurtCologne,
+    (cologne, essen) -> costIce724CologneEssen
+  )
+
+  val allCostIce726 = Map(
+    (munich, nuremberg) -> costIce726MunichNuremberg,
+    (nuremberg, frankfurt) -> costIce726NurembergFrankfurt,
+    (frankfurt, essen) -> costIce726FrankfurtEssen
+  )
+
+  val allCostIce728 = Map(
+    (essen, nuremberg) -> costIce728EssenNuremberg
+  )
+
+  val allCost = Map(
+    ice724 -> allCostIce724,
+    ice726 -> allCostIce726,
+    ice728 -> allCostIce728
+  )
+
 }
