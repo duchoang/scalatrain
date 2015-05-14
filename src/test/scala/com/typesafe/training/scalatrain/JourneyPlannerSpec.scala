@@ -56,38 +56,38 @@ class JourneyPlannerSpec extends WordSpec with Matchers {
 
   "Calling allMappingHops" should {
     "return all hops of all trains, grouped by the departing station" in {
-      planner.allMappingHops shouldEqual Map(
-        munich    -> Set(Hop(munich, nuremberg, ice724), Hop(munich, nuremberg, ice726)),
-        nuremberg -> Set(Hop(nuremberg, frankfurt, ice724), Hop(nuremberg, frankfurt, ice726)),
-        frankfurt -> Set(Hop(frankfurt, cologne, ice724), Hop(frankfurt, essen, ice726)),
-        cologne   -> Set(Hop(cologne, essen, ice724)),
-        essen     -> Set(Hop(essen, nuremberg, ice728))
+      planner.allMappingHops(allCost) shouldEqual Map(
+        munich    -> Set(Hop(munich, nuremberg, ice724, costIce724MunichNuremberg), Hop(munich, nuremberg, ice726, costIce726MunichNuremberg)),
+        nuremberg -> Set(Hop(nuremberg, frankfurt, ice724, costIce724NurembergFrankfurt), Hop(nuremberg, frankfurt, ice726, costIce726NurembergFrankfurt)),
+        frankfurt -> Set(Hop(frankfurt, cologne, ice724, costIce724FrankfurtCologne), Hop(frankfurt, essen, ice726, costIce726FrankfurtEssen)),
+        cologne   -> Set(Hop(cologne, essen, ice724, costIce724CologneEssen)),
+        essen     -> Set(Hop(essen, nuremberg, ice728, costIce728EssenNuremberg))
       )
     }
   }
 
   "Calling allConnections" should {
-    val pathMunichEssen = planner.allConnections(munich, essen, Time(8))
+    val pathMunichEssen = planner.allConnections(munich, essen, Time(8), allCost)
     val path1 = Seq(
-      Hop(munich, nuremberg, ice726),
-      Hop(nuremberg, frankfurt, ice726),
-      Hop(frankfurt, essen, ice726)
+      Hop(munich, nuremberg, ice726, costIce726MunichNuremberg),
+      Hop(nuremberg, frankfurt, ice726, costIce726NurembergFrankfurt),
+      Hop(frankfurt, essen, ice726, costIce726FrankfurtEssen)
     )
     val path2 = Seq(
-      Hop(munich, nuremberg, ice724),
-      Hop(nuremberg, frankfurt, ice724),
-      Hop(frankfurt, cologne, ice724),
-      Hop(cologne, essen, ice724)
+      Hop(munich, nuremberg, ice724, costIce724MunichNuremberg),
+      Hop(nuremberg, frankfurt, ice724, costIce724NurembergFrankfurt),
+      Hop(frankfurt, cologne, ice724, costIce724FrankfurtCologne),
+      Hop(cologne, essen, ice724, costIce724CologneEssen)
     )
     val path3 = Seq(
-      Hop(munich, nuremberg, ice726),
-      Hop(nuremberg, frankfurt, ice726)
+      Hop(munich, nuremberg, ice726, costIce726MunichNuremberg),
+      Hop(nuremberg, frankfurt, ice726, costIce726NurembergFrankfurt)
     )
     val path4 = Seq(
-      Hop(munich, nuremberg, ice724),
-      Hop(nuremberg, frankfurt, ice724)
+      Hop(munich, nuremberg, ice724, costIce724MunichNuremberg),
+      Hop(nuremberg, frankfurt, ice724, costIce724NurembergFrankfurt)
     )
-    val pathMunichFrankfurt = planner.allConnections(munich, frankfurt, Time(8))
+    val pathMunichFrankfurt = planner.allConnections(munich, frankfurt, Time(8), allCost)
 
     "return all possible paths between 2 stations" in {
       pathMunichEssen foreach (path => {
@@ -103,7 +103,7 @@ class JourneyPlannerSpec extends WordSpec with Matchers {
     }
 
     "return an empty Set for reverse paths between 2 stations" in {
-      planner.allConnections(frankfurt, munich, Time()) shouldEqual Set()
+      planner.allConnections(frankfurt, munich, Time(), allCost) shouldEqual Set()
     }
   }
 
@@ -116,6 +116,18 @@ class JourneyPlannerSpec extends WordSpec with Matchers {
       val (paths, times) = JourneyPlanner.sortPathsByTotalTime(Set(path1, path2)).unzip
       paths shouldEqual List(path2, path1)
       times shouldEqual List(totalTimeOfPath2, totalTimeOfPath1)
+    }
+  }
+
+  "Calling sortPathsByTotalCost" should {
+    "return the correct order of 2 paths" in {
+      Hop.checkPathValid(path1) shouldBe true
+      Hop.checkPathValid(path2) shouldBe true
+      val totalCostOfPath1 = JourneyPlanner.calculateTotalCost(path1)
+      val totalCostOfPath2 = JourneyPlanner.calculateTotalCost(path2)
+      val (paths, costs) = JourneyPlanner.sortPathsByTotalCost(Set(path1, path2)).unzip
+      paths shouldEqual List(path2, path1)
+      costs shouldEqual List(totalCostOfPath2, totalCostOfPath1)
     }
   }
 

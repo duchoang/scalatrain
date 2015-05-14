@@ -26,12 +26,13 @@ case class JourneyPlanner(trains: Set[Train]) {
     )
 
   // All hops of all trains, grouped by the departing station
-  val allMappingHops: Map[Station, Set[Hop]] = trains.flatMap(_.allHops).groupBy(hop => hop.from)
+  def allMappingHops(allCost: Map[Train, Map[(Station, Station), Double]]): Map[Station, Set[Hop]] =
+    trains.flatMap(train => train.allHops(allCost(train))).groupBy(hop => hop.from)
 
   // Connections between two stations given a departure time.
-  def allConnections(start: Station, end: Station, departureTime: Time): Set[Seq[Hop]] = {
+  def allConnections(start: Station, end: Station, departureTime: Time, allCost: Map[Train, Map[(Station, Station), Double]]): Set[Seq[Hop]] = {
 
-    val allHops = this.allMappingHops
+    val allHops = this.allMappingHops(allCost)
 
     def findPath(from: Station, visitedPath: Seq[Hop]): Set[Seq[Hop]] = {
       if (from == end) Set(visitedPath)
@@ -70,15 +71,23 @@ object JourneyPlanner {
       lastArr - firstDepart
   }
 
-  def sortPathsByTotalTime(paths: Set[Seq[Hop]]): List[(Seq[Hop], Int)] = {
-    val pathsWithTotalTime: List[(Seq[Hop], Int)] = paths.toList.map(path => {
-      assert(path.nonEmpty)
-      (path, calculateTotalTime(path))
-    })
-    pathsWithTotalTime.sortBy(tuple => tuple._2)
+  def calculateTotalCost(path: Seq[Hop]): Double = {
+    path.foldLeft(0.0)((costs, hop) => costs + hop.cost)
   }
 
-  def sortPathsByTotalCost(paths: Set[Seq[Hop]]): List[Seq[Hop]] = {
-    List()
+  def sortPaths[A](paths: Set[Seq[Hop]], calculate: Seq[Hop] => A)(implicit ordering: Ordering[A]): List[(Seq[Hop], A)] = {
+    val pathsWithTotal: List[(Seq[Hop], A)] = paths.toList.map(path => {
+      assert(path.nonEmpty)
+      (path, calculate(path))
+    })
+    pathsWithTotal.sortBy(tuple => tuple._2)
+  }
+
+  def sortPathsByTotalTime(paths: Set[Seq[Hop]]): List[(Seq[Hop], Int)] = {
+    sortPaths[Int](paths, calculateTotalTime)
+  }
+
+  def sortPathsByTotalCost(paths: Set[Seq[Hop]]): List[(Seq[Hop], Double)] = {
+    sortPaths[Double](paths, calculateTotalCost)
   }
 }
