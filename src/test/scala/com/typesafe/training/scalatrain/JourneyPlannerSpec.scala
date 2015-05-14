@@ -140,8 +140,22 @@ class JourneyPlannerSpec extends WordSpec with Matchers {
       planner.trainsOn(new DateTime(2015, 5, 17, 0, 0)) shouldEqual Set(ice728)
     }
     "return the list of train working on holiday" in {
-      planner.trainsOn(christmasDate) shouldEqual Set()
-      planner.trainsOn(newyearDate) shouldEqual Set(ice726)
+      planner.trainsOn(christmasDate) shouldEqual Set(ice728)
+      planner.trainsOn(newyearDate) shouldEqual Set(ice726, ice728)
+    }
+  }
+
+  "Calling findRoute" should {
+    "return all possible paths between 2 stations given a DateTime" in {
+      val expectedPath = Seq(
+        Hop(munich, nuremberg, ice724, costIce724MunichNuremberg),
+        Hop(nuremberg, frankfurt, ice724, costIce724NurembergFrankfurt),
+        Hop(frankfurt, cologne, ice724, costIce724FrankfurtCologne),
+        Hop(cologne, essen, ice724, costIce724CologneEssen)
+      )
+      planner.findRoute(munich, essen, new DateTime(2015, 5, 14, 8, 0), allCost) shouldEqual Set(expectedPath)
+      planner.findRoute(munich, essen, new DateTime(2015, 5, 15, 8, 0), allCost) shouldEqual Set(expectedPath)
+      planner.findRoute(munich, essen, new DateTime(2015, 5, 16, 8, 0), allCost) shouldEqual Set()
     }
   }
 

@@ -1,5 +1,7 @@
 package com.typesafe.training.scalatrain
 
+import org.joda.time.DateTime
+
 case class Hop(from: Station, to: Station, train: Train, cost: Double) {
   require(train.backToBackStations.nonEmpty)
   require(train.backToBackStations.contains((from, to)))

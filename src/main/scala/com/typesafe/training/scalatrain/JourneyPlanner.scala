@@ -38,6 +38,10 @@ case class JourneyPlanner(trains: Set[Train]) {
 
     val allHops = this.allMappingHops(allCost)
 
+    def hasRepeatedHop(visitedPath: Seq[Hop], hop: Hop): Boolean = {
+      !visitedPath.exists(_.from == hop.to)
+    }
+
     def findPath(from: Station, visitedPath: Seq[Hop]): Set[Seq[Hop]] = {
       if (from == end) Set(visitedPath)
       else {
@@ -59,9 +63,13 @@ case class JourneyPlanner(trains: Set[Train]) {
     }
   }
 
-  private def hasRepeatedHop(visitedPath: Seq[Hop], hop: Hop): Boolean = {
-    !visitedPath.exists(_.from == hop.to)
+  def findRoute(start: Station, end: Station, departureDateTime: DateTime, allCost: Map[Train, Map[(Station, Station), Double]]): Set[Seq[Hop]] = {
+    val departureTime: Time = Time(departureDateTime.getHourOfDay, departureDateTime.getMinuteOfHour)
+    val allPaths: Set[Seq[Hop]] = allConnections(start, end, departureTime, allCost)
+    allPaths.filter(path =>
+      path.nonEmpty && path.forall(hop => hop.train.canRun(departureDateTime)))
   }
+
 }
 
 object JourneyPlanner {

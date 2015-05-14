@@ -18,7 +18,7 @@ object TestData {
   val nonWorkingDatesIce726: Set[DateTime] = Set(christmasDate)
   val timeTableIce726 = TimeTable(regularDatesIce726, nonWorkingDatesIce726)
 
-  val regularDatesIce728: Set[DayOfWeek] = Set(Saturday, Sunday)
+  val regularDatesIce728: Set[DayOfWeek] = Set(Thursday, Friday, Saturday, Sunday)
   val nonWorkingDatesIce728: Set[DateTime] = Set()
   val timeTableIce728 = TimeTable(regularDatesIce728, nonWorkingDatesIce728)
 
