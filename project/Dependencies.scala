@@ -11,6 +11,7 @@ object Library {
   val scalaParsers = "org.scala-lang.modules" %% "scala-parser-combinators" % Version.scalaParsers
   val scalaTest    = "org.scalatest"          %% "scalatest"                % Version.scalaTest
   val playJson     = "com.typesafe.play"      %% "play-json"                % Version.playJson
+  val joda         = "org.joda"               % "joda-convert"             % "1.6"
 }
 
 object Dependencies {
@@ -20,6 +21,7 @@ object Dependencies {
   val scalaTrain = List(
     scalaParsers,
     scalaTest % "test",
-    playJson
+    playJson,
+    joda
   )
 }

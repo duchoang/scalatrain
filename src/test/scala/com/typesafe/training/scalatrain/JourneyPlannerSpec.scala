@@ -7,6 +7,7 @@ package com.typesafe.training.scalatrain
 import java.lang.{IllegalArgumentException => IAE}
 
 import com.typesafe.training.scalatrain.TestData._
+import org.joda.time.DateTime
 import org.scalatest.{Matchers, WordSpec}
 
 class JourneyPlannerSpec extends WordSpec with Matchers {
@@ -128,6 +129,19 @@ class JourneyPlannerSpec extends WordSpec with Matchers {
       val (paths, costs) = JourneyPlanner.sortPathsByTotalCost(Set(path1, path2)).unzip
       paths shouldEqual List(path2, path1)
       costs shouldEqual List(totalCostOfPath2, totalCostOfPath1)
+    }
+  }
+
+  "Calling trainsOn" should {
+    "return the list of train working on given date" in {
+      planner.trainsOn(new DateTime(2015, 5, 13, 0, 0)) shouldEqual Set(ice724, ice726)
+      planner.trainsOn(new DateTime(2015, 5, 11, 0, 0)) shouldEqual Set(ice724)
+      planner.trainsOn(new DateTime(2015, 5, 16, 0, 0)) shouldEqual Set(ice726, ice728)
+      planner.trainsOn(new DateTime(2015, 5, 17, 0, 0)) shouldEqual Set(ice728)
+    }
+    "return the list of train working on holiday" in {
+      planner.trainsOn(christmasDate) shouldEqual Set()
+      planner.trainsOn(newyearDate) shouldEqual Set(ice726)
     }
   }
 

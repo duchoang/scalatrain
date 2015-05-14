@@ -4,7 +4,23 @@
 
 package com.typesafe.training.scalatrain
 
+import org.joda.time.{DateTimeConstants, DateTime}
+
 object TestData {
+  val christmasDate = new DateTime(2015, 12, 24, 0, 0)
+  val newyearDate = new DateTime(2015, 1, 1, 0, 0)
+
+  val regularDatesIce724: Set[DayOfWeek] = Set(Monday, Tuesday, Wednesday, Thursday, Friday)
+  val nonWorkingDatesIce724: Set[DateTime] = Set(christmasDate, newyearDate)
+  val timeTableIce724 = TimeTable(regularDatesIce724, nonWorkingDatesIce724)
+
+  val regularDatesIce726: Set[DayOfWeek] = Set(Wednesday, Thursday, Friday, Saturday)
+  val nonWorkingDatesIce726: Set[DateTime] = Set(christmasDate)
+  val timeTableIce726 = TimeTable(regularDatesIce726, nonWorkingDatesIce726)
+
+  val regularDatesIce728: Set[DayOfWeek] = Set(Saturday, Sunday)
+  val nonWorkingDatesIce728: Set[DateTime] = Set()
+  val timeTableIce728 = TimeTable(regularDatesIce728, nonWorkingDatesIce728)
 
   val munich    = Station("Munich")
   val nuremberg = Station("Nuremberg")
@@ -34,7 +50,8 @@ object TestData {
       ice724FrankfurtTime -> frankfurt,
       ice724CologneTime   -> cologne,
       ice724EssenTime     -> essen
-    )
+    ),
+    timeTableIce724
   )
 
   val ice726 = Train(
@@ -44,7 +61,8 @@ object TestData {
       ice726NurembergTime -> nuremberg,
       ice726FrankfurtTime -> frankfurt,
       ice726EssenTime   -> essen
-    )
+    ),
+    timeTableIce726
   )
 
   val ice728 = Train(
@@ -52,7 +70,8 @@ object TestData {
     Vector(
       ice728EssenTime     -> essen,
       ice728NurembergTime -> nuremberg
-    )
+    ),
+    timeTableIce728
   )
 
   val planner = new JourneyPlanner(Set(ice724, ice726, ice728))
@@ -110,5 +129,4 @@ object TestData {
     ice726 -> allCostIce726,
     ice728 -> allCostIce728
   )
-
 }

@@ -1,8 +1,9 @@
 package com.typesafe.training.scalatrain
 
 import scala.collection.immutable.Seq
+import org.joda.time.DateTime
 
-case class Train(info: TrainInfo, schedule: Seq[(Time, Station)]) {
+case class Train(info: TrainInfo, schedule: Seq[(Time, Station)], timetable: TimeTable) {
   require(schedule.size >= 2, "schedule must contain at least two elements")
   // TODO Verify that `schedule` is strictly increasing in time
 
@@ -21,6 +22,10 @@ case class Train(info: TrainInfo, schedule: Seq[(Time, Station)]) {
   def allHops(allCost: Map[(Station, Station), Double]): Seq[Hop] = this.backToBackStations map {
     case (from, to) =>
       Hop(from, to, this, allCost((from, to)))
+  }
+
+  def canRun(givenDate: DateTime): Boolean = {
+    this.timetable.isAvailable(givenDate)
   }
 
   override val toString = info.toString
