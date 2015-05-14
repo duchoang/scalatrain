@@ -66,8 +66,28 @@ case class JourneyPlanner(trains: Set[Train]) {
   def findRoute(start: Station, end: Station, departureDateTime: DateTime, allCost: Map[Train, Map[(Station, Station), Double]]): Set[Seq[Hop]] = {
     val departureTime: Time = Time(departureDateTime.getHourOfDay, departureDateTime.getMinuteOfHour)
     val allPaths: Set[Seq[Hop]] = allConnections(start, end, departureTime, allCost)
-    allPaths.filter(path =>
+
+    val filterPaths = allPaths.filter(path =>
       path.nonEmpty && path.forall(hop => hop.train.canRunOnDate(departureDateTime)))
+
+    // adjust all cost on all path
+    filterPaths.map(path => {
+      path.map(hop => {
+        val now = DateTime.now()
+        val before2Week = departureDateTime.minusDays(14)
+        val before1Day = departureDateTime.minusDays(1)
+        val newcost =
+          if (now.compareTo(before1Day) >= 0) {
+            // now >= before1Day
+            hop.cost * 0.75
+          } else if (now.compareTo(before2Week) >= 0) {
+            // before2Week <= now < before1Day
+            hop.cost * 1.5
+          } else
+            hop.cost
+        hop.copy(cost = newcost)
+      })
+    })
   }
 
 }

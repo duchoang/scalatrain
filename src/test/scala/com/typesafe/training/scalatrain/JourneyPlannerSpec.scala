@@ -152,9 +152,9 @@ class JourneyPlannerSpec extends WordSpec with Matchers {
         Hop(frankfurt, cologne, ice724, costIce724FrankfurtCologne),
         Hop(cologne, essen, ice724, costIce724CologneEssen)
       )
-      planner.findRoute(munich, essen, new DateTime(2015, 5, 14, 8, 0), allCost) shouldEqual Set(expectedPath)
-      planner.findRoute(munich, essen, new DateTime(2015, 5, 15, 8, 0), allCost) shouldEqual Set(expectedPath)
-      planner.findRoute(munich, essen, new DateTime(2015, 5, 16, 8, 0), allCost) shouldEqual Set()
+      planner.findRoute(munich, essen, new DateTime(2015, 6, 4, 8, 0), allCost) shouldEqual Set(expectedPath)
+      planner.findRoute(munich, essen, new DateTime(2015, 6, 5, 8, 0), allCost) shouldEqual Set(expectedPath)
+      planner.findRoute(munich, essen, new DateTime(2015, 6, 6, 8, 0), allCost) shouldEqual Set()
     }
   }
 
