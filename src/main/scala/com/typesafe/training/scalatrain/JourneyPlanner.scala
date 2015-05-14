@@ -39,9 +39,7 @@ case class JourneyPlanner(trains: Set[Train]) {
         for {
           hop <- allHops.getOrElse(from, Set()) if hasRepeatedHop(visitedPath, hop)
           path <- findPath(hop.to, visitedPath :+ hop)
-        } yield {
-          path
-        }
+        } yield path
       }
     }
 

@@ -49,7 +49,7 @@ class JourneyPlannerSpec extends WordSpec with Matchers {
 
     "return false for zero stations (i.e. same station) in between" in {
       planner.isShortTrip(munich, munich)       shouldBe false
-      planner.isShortTrip(nuremberg, nuremberg) shouldBe false
+      planner.isShortTrip(nuremberg, nuremberg) shouldBe true
     }
 
   }

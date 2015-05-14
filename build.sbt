@@ -21,4 +21,4 @@ scalacOptions ++= List(
 
 initialCommands in console := "import com.typesafe.training.scalatrain._"
 
-//initialCommands in (Test, console) := (initialCommands in console).value + ",TestData._"
+initialCommands in (Test, console) := (initialCommands in console).value + ",TestData._"
