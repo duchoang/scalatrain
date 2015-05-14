@@ -24,9 +24,11 @@ case class Train(info: TrainInfo, schedule: Seq[(Time, Station)], timetable: Tim
       Hop(from, to, this, allCost((from, to)))
   }
 
-  def canRun(givenDate: DateTime): Boolean = {
-    this.timetable.isAvailable(givenDate)
-  }
+  def canRunOnDate(givenDate: DateTime): Boolean =
+    this.timetable.isAvailableForDate(givenDate)
+
+  def canRunOnWeekday(day: DayOfWeek): Boolean =
+    this.timetable.isAvailableForDay(day)
 
   override val toString = info.toString
 }

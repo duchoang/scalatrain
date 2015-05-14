@@ -4,28 +4,31 @@ import org.joda.time.DateTime
 
 case class TimeTable(workingDates: Set[DayOfWeek], nonWorkingDates: Set[DateTime]) {
 
-  def isAvailable(givenDate: DateTime): Boolean = {
+  def isAvailableForDate(givenDate: DateTime): Boolean = {
     val dayOfWeek = DayOfWeek(givenDate.getDayOfWeek)
     !inNonWorkingDates(givenDate) && dayOfWeek.nonEmpty && workingDates.contains(dayOfWeek.get)
   }
 
+  def isAvailableForDay(day: DayOfWeek): Boolean =
+    workingDates.contains(day)
+
   // return true if `givenDate` in the set of non-working-dates
   private def inNonWorkingDates(givenDate: DateTime): Boolean = {
-    nonWorkingDates.exists(date =>
-      date.getDayOfMonth == givenDate.getDayOfMonth && date.getMonthOfYear == givenDate.getMonthOfYear && date.getYear == givenDate.getYear)
+    def areDatesTheSame(date: DateTime): Boolean =
+      date.getDayOfMonth == givenDate.getDayOfMonth && date.getMonthOfYear == givenDate.getMonthOfYear && date.getYear == givenDate.getYear
+    nonWorkingDates.exists(date => areDatesTheSame(date))
   }
 }
 
-
 sealed trait DayOfWeek
 
-case object Monday extends DayOfWeek
-case object Tuesday extends DayOfWeek
+case object Monday    extends DayOfWeek
+case object Tuesday   extends DayOfWeek
 case object Wednesday extends DayOfWeek
-case object Thursday extends DayOfWeek
-case object Friday extends DayOfWeek
-case object Saturday extends DayOfWeek
-case object Sunday extends DayOfWeek
+case object Thursday  extends DayOfWeek
+case object Friday    extends DayOfWeek
+case object Saturday  extends DayOfWeek
+case object Sunday    extends DayOfWeek
 
 object DayOfWeek {
   def apply(index: Int): Option[DayOfWeek] = index match {
