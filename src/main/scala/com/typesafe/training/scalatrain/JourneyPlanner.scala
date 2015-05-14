@@ -1,10 +1,14 @@
 package com.typesafe.training.scalatrain
 
+import org.joda.time.DateTime
+
 import scala.collection.immutable.Set
 
 case class JourneyPlanner(trains: Set[Train]) {
 
   val stations: Set[Station] = trains.flatMap(_.stations)
+
+  def trainsOn(givenDate: DateTime): Set[Train] = trains.filter(_.canRun(givenDate))
 
   def trainsAt(station: Station): Set[Train] =
     trains.filter(_.stations.contains(station))
