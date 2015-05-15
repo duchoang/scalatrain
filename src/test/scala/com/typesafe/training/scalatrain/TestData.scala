@@ -27,6 +27,7 @@ object TestData {
   val frankfurt = Station("Frankfurt")
   val cologne   = Station("Cologne")
   val essen     = Station("Essen")
+  val stockport = Station("Stockport")
 
   val ice724MunichTime    = Time(8, 50)
   val ice724NurembergTime = Time(10)
@@ -36,6 +37,7 @@ object TestData {
 
   val ice728EssenTime     = Time(15, 30)
   val ice728NurembergTime = Time(16)
+  val ice728StockportTime = Time(17)
 
   val ice726MunichTime    = Time(7, 50)
   val ice726NurembergTime = Time(9)
@@ -69,7 +71,8 @@ object TestData {
     InterCityExpress(728),
     Vector(
       ice728EssenTime     -> essen,
-      ice728NurembergTime -> nuremberg
+      ice728NurembergTime -> nuremberg,
+      ice728StockportTime -> stockport
     ),
     timeTableIce728
   )
@@ -105,6 +108,7 @@ object TestData {
   val costIce726FrankfurtEssen = 1.0
 
   val costIce728EssenNuremberg = 4.0
+  val costIce728NurembergStockport = 10.0
 
 
   val allCostIce724 = Map(
@@ -121,7 +125,8 @@ object TestData {
   )
 
   val allCostIce728 = Map(
-    (essen, nuremberg) -> costIce728EssenNuremberg
+    (essen, nuremberg) -> costIce728EssenNuremberg,
+    (nuremberg, stockport) -> costIce728NurembergStockport
   )
 
   val allCost = Map(

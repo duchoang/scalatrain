@@ -8,6 +8,11 @@ case class JourneyPlanner(trains: Set[Train]) {
 
   val stations: Set[Station] = trains.flatMap(_.stations)
 
+  val mapBack2BackStations: Map[Station, Set[(Station, Station)]] =
+    trains.flatMap(train => train.backToBackStations).groupBy(back2Back => back2Back._1)
+
+  val sinkStations: Set[Station] = stations.filterNot(station => mapBack2BackStations.contains(station))
+
   def trainsOnWeekday(dayOfWeek: DayOfWeek): Set[Train] = trains.filter(_.canRunOnWeekday(dayOfWeek))
 
   def trainsOnDate(givenDate: DateTime): Set[Train] = trains.filter(_.canRunOnDate(givenDate))

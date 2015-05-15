@@ -14,7 +14,7 @@ class JourneyPlannerSpec extends WordSpec with Matchers {
 
   "stations" should {
     "be initialized correctly" in {
-      planner.stations shouldEqual Set(munich, nuremberg, frankfurt, cologne, essen)
+      planner.stations shouldEqual Set(munich, nuremberg, frankfurt, cologne, essen, stockport)
     }
   }
 
@@ -58,7 +58,7 @@ class JourneyPlannerSpec extends WordSpec with Matchers {
     "return all hops of all trains, grouped by the departing station" in {
       planner.allMappingHops(allCost) shouldEqual Map(
         munich    -> Set(Hop(munich, nuremberg, ice724, costIce724MunichNuremberg), Hop(munich, nuremberg, ice726, costIce726MunichNuremberg)),
-        nuremberg -> Set(Hop(nuremberg, frankfurt, ice724, costIce724NurembergFrankfurt), Hop(nuremberg, frankfurt, ice726, costIce726NurembergFrankfurt)),
+        nuremberg -> Set(Hop(nuremberg, frankfurt, ice724, costIce724NurembergFrankfurt), Hop(nuremberg, frankfurt, ice726, costIce726NurembergFrankfurt), Hop(nuremberg, stockport, ice728, costIce728NurembergStockport)),
         frankfurt -> Set(Hop(frankfurt, cologne, ice724, costIce724FrankfurtCologne), Hop(frankfurt, essen, ice726, costIce726FrankfurtEssen)),
         cologne   -> Set(Hop(cologne, essen, ice724, costIce724CologneEssen)),
         essen     -> Set(Hop(essen, nuremberg, ice728, costIce728EssenNuremberg))
@@ -155,6 +155,12 @@ class JourneyPlannerSpec extends WordSpec with Matchers {
       planner.findRoute(munich, essen, new DateTime(2015, 6, 4, 8, 0), allCost) shouldEqual Set(expectedPath)
       planner.findRoute(munich, essen, new DateTime(2015, 6, 5, 8, 0), allCost) shouldEqual Set(expectedPath)
       planner.findRoute(munich, essen, new DateTime(2015, 6, 6, 8, 0), allCost) shouldEqual Set()
+    }
+  }
+
+  "Calling sinkStations" should {
+    "return all sink stations" in {
+      planner.sinkStations shouldEqual Set(stockport)
     }
   }
 
