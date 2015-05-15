@@ -12,6 +12,7 @@ object Library {
   val scalaTest    = "org.scalatest"          %% "scalatest"                % Version.scalaTest
   val playJson     = "com.typesafe.play"      %% "play-json"                % Version.playJson
   val joda         = "org.joda"               % "joda-convert"             % "1.6"
+  val ws           = "com.typesafe.play"	    %% "play-ws" 	    % "2.4.0-M1" 			% "compile"
 }
 
 object Dependencies {
@@ -22,6 +23,7 @@ object Dependencies {
     scalaParsers,
     scalaTest % "test",
     playJson,
-    joda
+    joda,
+    ws
   )
 }
