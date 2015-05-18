@@ -13,9 +13,16 @@ import scala.concurrent.Future
 
 import scala.collection.mutable.{Map => MutableMap}
 
-case class CountryCode(code: String)
-case class Rate(value: Double)
-
+/*
+{
+    "base": "USD",
+    "date": "2015-05-15",
+    "rates": {
+        "AUD": 1.2499,
+        "BGN": 1.7265
+    }
+}
+ */
 case class Conversion(base: String, date: DateTime = DateTime.now, rates: List[(CountryCode, Rate)]) {
   def getRate(code: String): Option[Double] = {
     rates collectFirst {
@@ -23,6 +30,10 @@ case class Conversion(base: String, date: DateTime = DateTime.now, rates: List[(
     }
   }
 }
+
+case class CountryCode(code: String)
+case class Rate(value: Double)
+
 
 object Conversion {
 
@@ -58,7 +69,7 @@ object CurrencyService {
         request.withQueryString("base" -> fromCurrency)
            .get
            .map(response => {
-              val json = Json.parse(response.body)
+              val json: JsValue = Json.parse(response.body)
               val conversion: Conversion = json.validate[Conversion].get
 
               // save to cache
